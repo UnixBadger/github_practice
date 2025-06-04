@@ -248,19 +248,17 @@ static void skt_to_txt(const char * path, const struct Sigmet_DataType * type, i
     }
     /* Get daemon response, which should provide status, ray count, type count, and type index. */
     enum SigmetRaw_Status rh_stat = SigmetRawError;
-    int num_swps = -1;			/* Not used in this subcommand. Daemon sends it anyway. */
-    int num_rays = -1;
-    double swp_tm = NAN;
+    unsigned num_swps = -1;		/* Not used in this subcommand. Daemon sends it anyway. */
+    unsigned num_rays = -1;
     char tz[SIGMET_TZ_STRLEN] = {'\0'};
     struct msghdr rh_rps = {
-	.msg_iov = (struct iovec [5]){
+	.msg_iov = (struct iovec [4]){
 	    [0] = { .iov_base = &rh_stat,   .iov_len = sizeof rh_stat },
 	    [1] = { .iov_base = &num_swps,  .iov_len = sizeof num_swps },
 	    [2] = { .iov_base = &num_rays,  .iov_len = sizeof num_rays },
-	    [3] = { .iov_base = &swp_tm,    .iov_len = sizeof swp_tm },
-	    [4] = { .iov_base = tz,         .iov_len = SIGMET_TZ_STRLEN }
+	    [3] = { .iov_base = tz,         .iov_len = SIGMET_TZ_STRLEN }
 	},
-	.msg_iovlen = 5
+	.msg_iovlen = 4
     };
     if (recvmsg(rh_skt_fd, &rh_rps, 0) == -1) {
 	fprintf(stderr, "%s: when requesting ray headers could not get response from daemon "
@@ -287,7 +285,7 @@ static void skt_to_txt(const char * path, const struct Sigmet_DataType * type, i
 	exit(EXIT_FAILURE);
     }
     close(rh_err_pipe[0]);
-    if (num_rays <= 0) {
+    if (num_rays == 0) {
 	fprintf(stderr, "%s: got impossible ray count (%d) from daemon at socket %s.\n",
 		cmd, num_rays, path);
 	exit(EXIT_FAILURE);
