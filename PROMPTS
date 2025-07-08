@@ -1,0 +1,13 @@
+ray_headers.c --
+    Can you consoliate the output blocks in ray_hdrs_fm_fl and ray_hdrs_fm_skt into one function?
+--
+
+copy_bits.c --
+    Please make a C function that copies n bits from void * src starting at bit offset o in src[0] to
+    void * dest, with the bits packed to the right. Assume dest points to enough storage to hold n bits.
+--
+
+alloc3f.c --
+    Please create a C function that creates array f[num_i][num_j][num_k] ofr float values. All memory
+    must be allocated with one call to malloc.
+--
